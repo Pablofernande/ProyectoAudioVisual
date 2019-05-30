@@ -5,11 +5,16 @@ Capture video;
 color colorArma;
 
 
+int closestX = 0;
+int closestY = 0;
+
 void setup() {
   size(640, 480);
   
  video = new Capture(this, 640, 480);
  video.start();
+ 
+
   
 }
 
@@ -19,18 +24,17 @@ void captureEvent(Capture video) {
 
 
 void draw() {
-  pushMatrix();
-  scale(-1, 1);
+ pushMatrix();
+ scale(-1, 1);
  video.loadPixels();
  image(video, -video.width, 0);
  popMatrix();
-  escanearPixeles();
+ escanearPixeles();
+
 
 }
 void escanearPixeles(){
   float worldRecord=500;  
-  int closestX = 0;
-  int closestY = 0;
   
   
   for (int x = 0; x < video.width; x++ ) {
@@ -48,10 +52,11 @@ void escanearPixeles(){
      
       if (d < worldRecord) {
         worldRecord = d;
-        closestX = x;
+        closestX = abs(x-video.width);
         closestY = y;
       }
    }
+    println( closestX, closestY);
   }
   
   if (worldRecord < 10) { 
@@ -63,10 +68,12 @@ void escanearPixeles(){
   }
 }
 
+
+
 void mousePressed() {
   //Guardar el color del objeto usado como arma
-  int loc = mouseX + mouseY*video.width;
+  int loc = -mouseX + mouseY*video.width;
   colorArma = video.pixels[loc];
-  println(colorArma);
+ 
   //rojo -7723216
 }
