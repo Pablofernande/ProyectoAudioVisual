@@ -3,7 +3,7 @@ import processing.video.*;
 
 Capture video;
 color colorArma;
-
+Objetivo objetivo;
 
 int closestX = 0;
 int closestY = 0;
@@ -14,7 +14,9 @@ void setup() {
  video = new Capture(this, 640, 480);
  video.start();
  
-
+ float xO=random(20,600);
+ float yO=10;
+ objetivo=new Objetivo(xO,yO);
   
 }
 
@@ -30,7 +32,8 @@ void draw() {
  image(video, -video.width, 0);
  popMatrix();
  escanearPixeles();
-
+ objetivo.dibujar();
+ objetivo.mover();
 
 }
 void escanearPixeles(){
@@ -69,6 +72,9 @@ void escanearPixeles(){
 }
 
 
+void checkColision(){
+
+}
 
 void mousePressed() {
   //Guardar el color del objeto usado como arma
