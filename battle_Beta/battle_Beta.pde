@@ -1,5 +1,6 @@
 
 import processing.video.*;
+import ddf.minim.*;
 
 Capture video;
 color colorArma;
@@ -8,15 +9,22 @@ Objetivo objetivo;
 int closestX = 0;
 int closestY = 0;
 
+int vidas=3;
+
+ArrayList<Objetivo> objetivos = new ArrayList<Objetivo>();
+
+
+
 void setup() {
-  size(640, 480);
+
+  size(640,480);
   
- video = new Capture(this, 640, 480);
+ video = new Capture(this, width, height);
  video.start();
- 
- float xO=random(20,600);
- float yO=10;
- objetivo=new Objetivo(xO,yO);
+ for(int i=0;i<=3;i++){
+
+   objetivos.add(new Objetivo());
+ }
   
 }
 
@@ -26,14 +34,26 @@ void captureEvent(Capture video) {
 
 
 void draw() {
+  
+  
+  
  pushMatrix();
  scale(-1, 1);
  video.loadPixels();
  image(video, -video.width, 0);
  popMatrix();
  escanearPixeles();
- objetivo.dibujar();
- objetivo.mover();
+ 
+ pintarVidas();
+ 
+ 
+ for (Objetivo objetivo : objetivos) {
+   checkColision(objetivo);
+   objetivo.dibujar();
+   objetivo.mover();
+    println( "dentro");
+ }
+ 
 
 }
 void escanearPixeles(){
@@ -59,7 +79,7 @@ void escanearPixeles(){
         closestY = y;
       }
    }
-    println( closestX, closestY);
+   
   }
   
   if (worldRecord < 10) { 
@@ -72,8 +92,12 @@ void escanearPixeles(){
 }
 
 
-void checkColision(){
-
+void checkColision(Objetivo objetivo){
+  if(closestX>=objetivo.x && closestX<=objetivo.x+objetivo.size){
+    if(closestY>=objetivo.y && closestY<=objetivo.y+objetivo.size){
+       objetivo.colision();  
+    }
+  }
 }
 
 void mousePressed() {
@@ -81,5 +105,13 @@ void mousePressed() {
   int loc = -mouseX + mouseY*video.width;
   colorArma = video.pixels[loc];
  
-  //rojo -7723216
+}
+
+void pintarVidas(){
+  float gap=25;
+  for(int i=1;i<=vidas;i++){
+   fill(255,0,0);
+   strokeWeight(1);
+   ellipse(width-i*gap,height/15,20,20);
+ }
 }

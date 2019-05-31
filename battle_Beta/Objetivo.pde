@@ -1,25 +1,44 @@
 class Objetivo{
+
  float x, y;
- float diametro = 40;
+ float size = 40;
 
- float vy = 5;
- boolean estaColisionando = false;
+ float vy = 2;
+ boolean estaDestruido = false;
+ 
 
- public Objetivo(float x, float y){
- this.x = x;
- this.y = y;
+ public Objetivo(){
+
+  reset();
  }
 
  void dibujar(){
- fill(120,220,120);
- strokeWeight(1);
- rect(x,y,diametro,diametro);
+  if(!estaDestruido){ 
+     fill(120,220,120);
+     strokeWeight(1);
+     rect(x,y,size,size);
+  }
  }
 
  void mover(){
- if( y-diametro/2 < 0){
-   //Fail
+   if(y > height){
+     estaDestruido=true;
+     vidas--;
+     reset();
+   }
+   this.y += vy;
  }
- this.y += vy;
+ 
+ 
+ void colision(){
+   estaDestruido=true;
+   reset();
+ }
+ 
+ void reset(){
+   this.x=random(20,width-40);
+   this.y=10;
+   estaDestruido=false;
+   
  }
 }
