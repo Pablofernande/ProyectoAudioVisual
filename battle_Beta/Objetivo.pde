@@ -3,7 +3,8 @@ class Objetivo{
  float x, y;
  float size = 40;
 
- float vy = 2;
+ float vy = -2;
+ float vx;
  boolean estaDestruido = false;
  
  boolean trampa=false;
@@ -41,7 +42,11 @@ class Objetivo{
      estaDestruido=true;
      reset();
    }
+   if(y<=height/8){
+      vy=vy*-1;   
+   }
    this.y += vy;
+   this.x+=vx;
  }
  
  
@@ -61,17 +66,27 @@ class Objetivo{
  
  void reset(){
    this.x=random(20,width-40);
-   this.y=10;
+   this.y=height-10;
    estaDestruido=false;
    trampa=false;
    bonus=false;
    float z=random(9);
+   vy=-random(1.5,2.5);
+   
+   vx=random(0.5,1);
+   
+   if(x>width/2){
+     vx=vx*-1;
+   }
+   
+   
    if(puntuacion>100){
      if(z>=8&& z<9){
        trampa=true;
      }
      if(z>3&&z<3.5){
        bonus=true;
+       vy=-5;
      }
      println(z);
    }
