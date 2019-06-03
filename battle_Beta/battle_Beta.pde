@@ -13,13 +13,18 @@ int vidas=3;
 
 int puntuacion=0;
 
+int count=3;
+
 ArrayList<Objetivo> objetivos = new ArrayList<Objetivo>();
 
 boolean added=false;
 
-
+boolean inicio,cuentaAtras=false,detectandoArma=true;
 
 void setup() {
+  
+  inicio=true;
+
 
   size(640,480);
   
@@ -39,20 +44,79 @@ void captureEvent(Capture video) {
 
 void draw() {
   
+  if(cuentaAtras){
+    
+      if(count>0){
+        println("dentro");
+        background(128);
+        textSize(30);
+        text("El Juego Comenzara en:",width/10*2, height/10*3);
+        fill(255,255,255);
+        textSize(60);
+        text(count,width/2, height/10*5);
+        fill(255,255,255);
+        delay(2000);
+        count--;
+    }
+    
+    else{
+      cuentaAtras=false;
+      count=3;
+    }
+    
+    
+  }
+  
+  
+  else{
+  
+    if(inicio){
+      background(128);
+      textSize(35);
+      text("Pulsa 'J' para\niniciar el juego",width/10*2, height/10*4);
+      fill(255,255,255);
+    }
+    
+    else if(detectandoArma){
+     pushMatrix();
+     scale(-1, 1);
+     video.loadPixels();
+     image(video, -video.width, 0);
+     popMatrix();
+     escanearPixeles();
+     fill(255,255,255);
+     textSize(20);
+     text("Selecciona con el ratón el arma que vayas ha usar",20, height-20);
 
- pushMatrix();
- scale(-1, 1);
- video.loadPixels();
- image(video, -video.width, 0);
- popMatrix();
- escanearPixeles();
- 
- pintarVidas();
- 
- controlObjetivos();
- 
- pintarPuntuacion();
-
+   }
+  
+   else if(vidas<=0){
+      background(128);
+      textSize(40);
+      text("Puntuación Final: "+puntuacion,width/10*2, height/10*3);
+     
+      textSize(30);
+      text("Pulsa 'G' para\nreiniciar el juego",width/10*2, height/10*5);
+      fill(255,255,255);
+    }
+    
+    else{
+     pushMatrix();
+     scale(-1, 1);
+     video.loadPixels();
+     image(video, -video.width, 0);
+     popMatrix();
+     escanearPixeles();
+     
+     pintarVidas();
+     
+     controlObjetivos();
+     
+     pintarPuntuacion();
+  
+    
+    }
+ }
 }
 void escanearPixeles(){
   float worldRecord=500;  
@@ -100,10 +164,29 @@ void checkColision(Objetivo objetivo){
 }
 
 void mousePressed() {
+ if(!inicio){
   //Guardar el color del objeto usado como arma
   int loc = -mouseX + mouseY*video.width;
   colorArma = video.pixels[loc];
+    cuentaAtras=true;
+    detectandoArma=false;
+  }
+  
  
+ 
+}
+
+void keyPressed(){
+  if(key=='j'){
+    inicio=false;
+    
+  }
+  
+  if(key=='g'){
+    cuentaAtras=true;
+    resetGame();
+  }
+
 }
 
 void pintarVidas(){
@@ -136,4 +219,12 @@ void controlObjetivos(){
    objetivo.dibujar();
    objetivo.mover();
  }
+}
+
+void resetGame(){
+  vidas=3;
+  puntuacion=0;
+  objetivos = new ArrayList<Objetivo>();
+  added=false;
+  
 }
