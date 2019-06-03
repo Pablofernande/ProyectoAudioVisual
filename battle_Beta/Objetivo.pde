@@ -21,6 +21,9 @@ class Objetivo{
     if(trampa){
      fill(255,0,0);
     }
+    else if(bonus){
+     fill(0,125,255);
+    }
     else{
       fill(120,220,120);
     }
@@ -32,7 +35,7 @@ class Objetivo{
 
  void mover(){
    if(y > height){
-      if(!trampa){
+      if(!trampa && !bonus){
        vidas--;
      }
      estaDestruido=true;
@@ -46,6 +49,9 @@ class Objetivo{
    if(trampa){
      vidas--;
    }
+   else if(bonus){
+     puntuacion+=50;
+   }
    else{
      puntuacion+=10;
    }
@@ -58,6 +64,7 @@ class Objetivo{
    this.y=10;
    estaDestruido=false;
    trampa=false;
+   bonus=false;
    float z=random(9);
    if(puntuacion>100){
      if(z>=8&& z<9){
@@ -66,6 +73,7 @@ class Objetivo{
      if(z>3&&z<3.5){
        bonus=true;
      }
+     println(z);
    }
    
    
