@@ -6,6 +6,10 @@ class Objetivo{
  float vy = 2;
  boolean estaDestruido = false;
  
+ boolean trampa=false;
+ 
+ boolean bonus=false;
+ 
 
  public Objetivo(){
 
@@ -14,7 +18,13 @@ class Objetivo{
 
  void dibujar(){
   if(!estaDestruido){ 
-     fill(120,220,120);
+    if(trampa){
+     fill(255,0,0);
+    }
+    else{
+      fill(120,220,120);
+    }
+     
      strokeWeight(1);
      rect(x,y,size,size);
   }
@@ -22,8 +32,10 @@ class Objetivo{
 
  void mover(){
    if(y > height){
+      if(!trampa){
+       vidas--;
+     }
      estaDestruido=true;
-     vidas--;
      reset();
    }
    this.y += vy;
@@ -31,6 +43,12 @@ class Objetivo{
  
  
  void colision(){
+   if(trampa){
+     vidas--;
+   }
+   else{
+     puntuacion+=10;
+   }
    estaDestruido=true;
    reset();
  }
@@ -39,6 +57,17 @@ class Objetivo{
    this.x=random(20,width-40);
    this.y=10;
    estaDestruido=false;
+   trampa=false;
+   float z=random(9);
+   if(puntuacion>100){
+     if(z>=8&& z<9){
+       trampa=true;
+     }
+     if(z>3&&z<3.5){
+       bonus=true;
+     }
+   }
+   
    
  }
 }

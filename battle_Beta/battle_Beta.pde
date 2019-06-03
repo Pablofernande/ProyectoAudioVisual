@@ -1,6 +1,6 @@
 
 import processing.video.*;
-import ddf.minim.*;
+
 
 Capture video;
 color colorArma;
@@ -11,7 +11,11 @@ int closestY = 0;
 
 int vidas=3;
 
+int puntuacion=0;
+
 ArrayList<Objetivo> objetivos = new ArrayList<Objetivo>();
+
+boolean added=false;
 
 
 
@@ -21,7 +25,7 @@ void setup() {
   
  video = new Capture(this, width, height);
  video.start();
- for(int i=0;i<=3;i++){
+ for(int i=0;i<=-1;i++){
 
    objetivos.add(new Objetivo());
  }
@@ -35,8 +39,7 @@ void captureEvent(Capture video) {
 
 void draw() {
   
-  
-  
+
  pushMatrix();
  scale(-1, 1);
  video.loadPixels();
@@ -46,14 +49,9 @@ void draw() {
  
  pintarVidas();
  
+ controlObjetivos();
  
- for (Objetivo objetivo : objetivos) {
-   checkColision(objetivo);
-   objetivo.dibujar();
-   objetivo.mover();
-    println( "dentro");
- }
- 
+ pintarPuntuacion();
 
 }
 void escanearPixeles(){
@@ -96,6 +94,7 @@ void checkColision(Objetivo objetivo){
   if(closestX>=objetivo.x && closestX<=objetivo.x+objetivo.size){
     if(closestY>=objetivo.y && closestY<=objetivo.y+objetivo.size){
        objetivo.colision();  
+       
     }
   }
 }
@@ -113,5 +112,28 @@ void pintarVidas(){
    fill(255,0,0);
    strokeWeight(1);
    ellipse(width-i*gap,height/15,20,20);
+ }
+}
+ 
+void pintarPuntuacion(){
+   fill(255,255,255);
+   textSize(20);
+   text(puntuacion,30,height/15);
+ 
+}
+void controlObjetivos(){
+  if(puntuacion%100==0 && added==false){
+     objetivos.add(new Objetivo());
+     added=true;
+  }
+  
+  if(puntuacion%100!=0){
+    added=false;
+  }
+  
+  for (Objetivo objetivo : objetivos) {
+   checkColision(objetivo);
+   objetivo.dibujar();
+   objetivo.mover();
  }
 }
