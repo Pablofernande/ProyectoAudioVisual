@@ -24,6 +24,8 @@ PImage naveNorm,bomba,Medalla;
 
 PImage portada1,portada2,portada3;
 
+PFont font;
+
 void setup() {
   
   inicio=true;
@@ -36,6 +38,7 @@ void setup() {
   portada2 = loadImage("img/Portada2.jpg");
   portada3 = loadImage("img/Portada3.jpg");
   
+  font = createFont("Arial Bold", 35);
   
   size(640,480);
   
@@ -58,13 +61,14 @@ void draw() {
   if(cuentaAtras){
     
       if(count>0){
-        println("dentro");
         image(portada3,0,0,width,height);
+        textFont(font);
         textSize(30);
-        text("El Juego Comenzara en:",width/10*2, height/10*3);
+        text("El Juego Comenzara en:",width/10*2, height/10*4);
         fill(255,255,255);
+        textFont(font);
         textSize(60);
-        text(count,width/2, height/10*5);
+        text(count,width/2, height/10*6);
         fill(255,255,255);
         if(count!=3){
           delay(2000);
@@ -86,9 +90,13 @@ void draw() {
   
     if(inicio){
       image(portada1,0,0,width,height);
-      textSize(35);
-      text("Pulsa 'J' para\niniciar el juego",width/10*2, height/10*4);
       fill(255,255,255);
+      textFont(font);
+      textSize(35);
+      text("Pulsa 'J' para\nIniciar el Juego",width/10*2, height/10*5);
+       
+     
+      
     }
     
     else if(detectandoArma){
@@ -99,6 +107,7 @@ void draw() {
      popMatrix();
      escanearPixeles();
      fill(255,255,255);
+     textFont(font);
      textSize(20);
      text("Selecciona con el ratón el arma que vayas ha usar",20, height-20);
 
@@ -106,11 +115,12 @@ void draw() {
   
    else if(vidas<=0){
       image(portada2,0,0,width,height);
-      textSize(40);
-      text("Puntuación Final: "+puntuacion,width/10*2, height/10*3);
-     
+      textFont(font);
       textSize(30);
-      text("Pulsa 'G' para\nreiniciar el juego",width/10*2, height/10*5);
+      text("Puntuación Final: "+puntuacion,width/10*1, height/10*6);
+      textFont(font); 
+      textSize(20);
+      text("Pulsa 'G' para reiniciar el juego",width/10*1, height/10*8);
       fill(255,255,255);
     }
     
@@ -214,6 +224,7 @@ void pintarVidas(){
  
 void pintarPuntuacion(){
    fill(255,255,255);
+   textFont(font);
    textSize(20);
    text(puntuacion,30,height/15);
  
