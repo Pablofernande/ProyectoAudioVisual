@@ -21,16 +21,21 @@ class Objetivo{
   if(!estaDestruido){ 
     if(trampa){
      fill(255,0,0);
+     image(bomba,x,y,size+5,size+5);
     }
     else if(bonus){
      fill(0,125,255);
+     image(Medalla,x,y,size+15,size+15);
+     
     }
     else{
       fill(120,220,120);
+      image(naveNorm,x,y,size+15,size+15);
     }
      
      strokeWeight(1);
-     rect(x,y,size,size);
+     //rect(x,y,size,size);
+    
   }
  }
 

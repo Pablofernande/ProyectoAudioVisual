@@ -20,12 +20,23 @@ ArrayList<Objetivo> objetivos = new ArrayList<Objetivo>();
 boolean added=false;
 
 boolean inicio,cuentaAtras=false,detectandoArma=true;
+PImage naveNorm,bomba,Medalla;
+
+PImage portada1,portada2,portada3;
 
 void setup() {
   
   inicio=true;
-
-
+  
+  naveNorm = loadImage("img/NaveStela.png");
+  bomba = loadImage("img/bomb.png");
+  Medalla = loadImage("img/Medalla.png");
+  
+  portada1 = loadImage("img/Portada1.jpg");
+  portada2 = loadImage("img/Portada2.jpg");
+  portada3 = loadImage("img/Portada3.jpg");
+  
+  
   size(640,480);
   
  video = new Capture(this, width, height);
@@ -48,14 +59,17 @@ void draw() {
     
       if(count>0){
         println("dentro");
-        background(128);
+        image(portada3,0,0,width,height);
         textSize(30);
         text("El Juego Comenzara en:",width/10*2, height/10*3);
         fill(255,255,255);
         textSize(60);
         text(count,width/2, height/10*5);
         fill(255,255,255);
-        delay(2000);
+        if(count!=3){
+          delay(2000);
+        }
+        
         count--;
     }
     
@@ -71,7 +85,7 @@ void draw() {
   else{
   
     if(inicio){
-      background(128);
+      image(portada1,0,0,width,height);
       textSize(35);
       text("Pulsa 'J' para\niniciar el juego",width/10*2, height/10*4);
       fill(255,255,255);
@@ -91,7 +105,7 @@ void draw() {
    }
   
    else if(vidas<=0){
-      background(128);
+      image(portada2,0,0,width,height);
       textSize(40);
       text("Puntuación Final: "+puntuacion,width/10*2, height/10*3);
      
