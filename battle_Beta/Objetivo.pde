@@ -11,6 +11,8 @@ class Objetivo{
  
  boolean bonus=false;
  
+ boolean vida=false;
+ 
 
  public Objetivo(){
 
@@ -28,6 +30,11 @@ class Objetivo{
      image(Medalla,x,y,size+15,size+15);
      
     }
+    
+    else if(vida){
+      fill(100,0,0);
+      image(corazon,x,y,size+5,size+5);
+    }
     else{
       fill(120,220,120);
       image(naveNorm,x,y,size+15,size+15);
@@ -43,6 +50,7 @@ class Objetivo{
    if(y > height){
       if(!trampa && !bonus){
        vidas--;
+       lossingLive.trigger();
      }
      estaDestruido=true;
      reset();
@@ -57,12 +65,21 @@ class Objetivo{
  
  void colision(){
    if(trampa){
+     explosion.trigger();
      vidas--;
    }
    else if(bonus){
+     prizeSound.trigger();
      puntuacion+=50;
    }
+   else if(vida){
+     gainLive.trigger();
+     if(vidas<6){
+       vidas++;
+     }
+   }
    else{
+     destroyShip.trigger();
      puntuacion+=10;
    }
    estaDestruido=true;
@@ -75,6 +92,7 @@ class Objetivo{
    estaDestruido=false;
    trampa=false;
    bonus=false;
+   vida=false;
    float z=random(9);
    vy=-random(1.5,2.5);
    
@@ -93,6 +111,10 @@ class Objetivo{
        bonus=true;
        vy=-5;
      }
+      if(z>6&&z<6.5 && vidas<6){
+       vida=true;
+     }
+     
      println(z);
    }
    

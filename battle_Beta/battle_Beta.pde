@@ -1,6 +1,6 @@
 
 import processing.video.*;
-
+import ddf.minim.*;
 
 Capture video;
 color colorArma;
@@ -19,20 +19,52 @@ ArrayList<Objetivo> objetivos = new ArrayList<Objetivo>();
 
 boolean added=false;
 
-boolean inicio,cuentaAtras=false,detectandoArma=true;
-PImage naveNorm,bomba,Medalla;
+boolean inicio,cuentaAtras=false,detectandoArma=true,gameMusicOn=false;
+PImage naveNorm,bomba,Medalla,corazon;
 
 PImage portada1,portada2,portada3;
 
 PFont font;
 
+
+Minim minim;
+
+AudioSample countSound;
+AudioSample explosion;
+AudioSample loseSound;
+AudioSample lossingLive;
+AudioSample prizeSound;
+AudioSample destroyShip;
+AudioSample gainLive;
+
+AudioPlayer musicaFondo;
+AudioPlayer musicaFondo2;
+
 void setup() {
+  
+  minim=new Minim(this);
+  
+  countSound=minim.loadSample("sounds/countDown.wav");
+  explosion=minim.loadSample("sounds/Explosion.wav");
+  loseSound=minim.loadSample("sounds/lose.wav");
+  lossingLive=minim.loadSample("sounds/LossingLive.wav");
+  prizeSound=minim.loadSample("sounds/Prize.wav");
+  destroyShip=minim.loadSample("sounds/DestroyElement.wav");
+  gainLive=minim.loadSample("sounds/live.mp3");
+  
+  musicaFondo=minim.loadFile("sounds/Song.mp3");
+  musicaFondo2=minim.loadFile("sounds/Song2.mp3");
+  
+  musicaFondo.loop();
+  
+
   
   inicio=true;
   
   naveNorm = loadImage("img/NaveStela.png");
   bomba = loadImage("img/bomb.png");
   Medalla = loadImage("img/Medalla.png");
+  corazon = loadImage("img/corazon.png");
   
   portada1 = loadImage("img/Portada1.jpg");
   portada2 = loadImage("img/Portada2.jpg");
@@ -40,6 +72,9 @@ void setup() {
   
   font = createFont("Arial Bold", 35);
   
+  //Resluciones:
+  //640,480
+  //1280,720
   size(640,480);
   
  video = new Capture(this, width, height);
@@ -59,8 +94,8 @@ void captureEvent(Capture video) {
 void draw() {
   
   if(cuentaAtras){
-    
-      if(count>0){
+        
+      if(count>=0){
         image(portada3,0,0,width,height);
         textFont(font);
         textSize(30);
@@ -70,7 +105,9 @@ void draw() {
         textSize(60);
         text(count,width/2, height/10*6);
         fill(255,255,255);
+        countSound.trigger();
         if(count!=3){
+          countSound.trigger();
           delay(2000);
         }
         
@@ -78,8 +115,10 @@ void draw() {
     }
     
     else{
+      
       cuentaAtras=false;
       count=3;
+      musicaFondo2.loop();
     }
     
     
@@ -114,6 +153,14 @@ void draw() {
    }
   
    else if(vidas<=0){
+      
+      if(!gameMusicOn){
+        musicaFondo2.pause(); 
+        musicaFondo.play();
+        gameMusicOn=true;
+        loseSound.trigger();
+      }
+     
       image(portada2,0,0,width,height);
       textFont(font);
       textSize(30);
@@ -194,6 +241,8 @@ void mousePressed() {
   colorArma = video.pixels[loc];
     cuentaAtras=true;
     detectandoArma=false;
+     musicaFondo.pause();
+   
   }
   
  
@@ -203,12 +252,14 @@ void mousePressed() {
 void keyPressed(){
   if(key=='j'){
     inicio=false;
+   
     
   }
   
   if(key=='g'){
     cuentaAtras=true;
     resetGame();
+    musicaFondo.pause();
   }
 
 }
@@ -251,5 +302,6 @@ void resetGame(){
   puntuacion=0;
   objetivos = new ArrayList<Objetivo>();
   added=false;
+  gameMusicOn=false;
   
 }
